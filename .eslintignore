@@ -1,0 +1,4 @@
+fixtures/error
+build
+example/**/double.js
+example/**/single.js

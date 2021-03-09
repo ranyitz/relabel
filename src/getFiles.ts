@@ -1,4 +1,4 @@
-import globby from "globby"
+import globby from 'globby';
 
 export type Pattern = string | readonly string[];
 
@@ -9,4 +9,4 @@ export const getFiles = (pattern: Pattern) => {
     ignore: ['**/node_modules/**', '**/.git/**'],
     dot: true,
   });
-}
+};

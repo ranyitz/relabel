@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "build",
     "target": "ES2018",
     "module": "commonjs",
     "declaration": true,
@@ -9,6 +11,7 @@
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true
   },
+  "include": ["src"],
   "exclude": [
     "**/build/**/*"
   ]

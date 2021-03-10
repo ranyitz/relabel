@@ -22,13 +22,27 @@ export const interactive = async ({
       const [replace, setReplace] = useState<string>(initialReplace || '');
       const [cursur, setCursor] = useState({ cursorOffset: 0, activeInput: 0 });
       const { activeInput, cursorOffset } = cursur;
+      const [files, setFiles] = useState<Array<string>>([]);
 
       const setCursorOffset = (offset: number) =>
         setCursor({ cursorOffset: offset, activeInput });
 
       const getInput = (index: number) => {
         if (index === 0) {
-          return { value: pattern, setValue: setPattern };
+          return {
+            value: pattern,
+            setValue: (p: string) => {
+              if (!p) {
+                setFiles([]);
+              } else {
+                getFiles(p).then((f) => {
+                  setFiles(f);
+                });
+              }
+
+              setPattern(p);
+            },
+          };
         }
 
         if (index === 1) {
@@ -91,10 +105,10 @@ export const interactive = async ({
         } else {
           if (key.delete || key.backspace) {
             if (cursorOffset > 0) {
+              setCursorOffset(cursorOffset - 1);
               setValue(
                 value.slice(0, cursorOffset - 1) + value.slice(cursorOffset)
               );
-              setCursorOffset(cursorOffset - 1);
             }
           } else {
             setValue(
@@ -139,7 +153,7 @@ export const interactive = async ({
             />
           </Box>
           <Monitor
-            pattern={pattern}
+            files={files}
             searchRegexp={searchRegexp}
             replace={replace}
           />
@@ -197,19 +211,17 @@ export const interactive = async ({
     };
 
     const Monitor = ({
-      pattern,
+      files,
       searchRegexp,
       replace,
     }: {
-      pattern: string;
+      files: Array<string>;
       searchRegexp?: RegExp;
       replace: string;
     }) => {
-      if (!pattern) {
+      if (files.length === 0) {
         return <></>;
       }
-
-      const files = getFiles(pattern);
 
       return (
         <>

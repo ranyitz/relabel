@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import { getFiles } from './getFiles';
 
-export const execute = ({
+export const execute = async ({
   pattern,
   search,
   replace,
@@ -12,7 +12,7 @@ export const execute = ({
   replace: string;
   dry: boolean;
 }) => {
-  const files = getFiles(pattern);
+  const files = await getFiles(pattern);
 
   files.forEach((filePath) => {
     const searchRegexp = new RegExp(search);

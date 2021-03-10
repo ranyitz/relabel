@@ -3,3 +3,4 @@ build
 tsconfig.tsbuildinfo
 tsconfig.prod.tsbuildinfo
 .DS_Store
+.eslintcache

@@ -37,13 +37,13 @@ if (args['--help']) {
       > relabel [pattern] [old] [new]
 
     Interactive Mode
-      > relable
+      > relabel
 
     Modify
-      > relable '**/*.spec.js' spec test  => dir/file.test.js
+      > relabel '**/*.spec.js' spec test  => dir/file.test.js
 
     Remove
-      > relable '**/foo-bar.js' foo-  =>  dir/bar.js
+      > relabel '**/foo-bar.js' foo-  =>  dir/bar.js
 
     Options
       --version, -v       Version number

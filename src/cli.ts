@@ -57,7 +57,7 @@ if (args['--help']) {
 
 const [pattern, search, replace = ''] = args._.slice(0, 3);
 
-if (args['--interactive'] || !pattern || !search || !replace) {
+if (args['--interactive'] || !pattern || !search) {
   interactive({
     initialPattern: pattern,
     initialSearch: search,

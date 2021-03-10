@@ -1,6 +1,6 @@
 import arg from 'arg';
-import fs from 'fs-extra';
-import { getFiles } from './getFiles';
+import { interactive } from './interactive';
+import { execute } from './execute';
 
 process.on('unhandledRejection', (error) => {
   throw error;
@@ -13,11 +13,13 @@ const args = arg(
     '--help': Boolean,
     '--verbose': Boolean,
     '--dry': Boolean,
+    '--interactive': Boolean,
 
     // Aliases
     '-v': '--version',
     '-h': '--help',
     '-d': '--dry',
+    '-i': '--interactive',
   },
   {
     permissive: false,
@@ -32,28 +34,45 @@ if (args['--version']) {
 if (args['--help']) {
   console.log(`
     Usage
-      > relabel <pattern> <old> [new]
+      > relabel [pattern] [old] [new]
 
-    Remove
-      > relable **/foo-bar.js foo-  =>  dir/bar.js
+    Interactive Mode
+      > relable
 
     Modify
-      > relable **/*.spec.js spec test  => dir/file.test.js
+      > relable '**/*.spec.js' spec test  => dir/file.test.js
+
+    Remove
+      > relable '**/foo-bar.js' foo-  =>  dir/bar.js
 
     Options
-      --version, -v   Version number
-      --help, -h      Displays this message
-      --dry, -d       Dry-run mode, does not modify files
+      --version, -v       Version number
+      --help, -h          Displays this message
+      --dry, -d           Dry-run mode, does not modify files
+      --interactive, -i   Interactive Mode, automatically used when not all argument are provided
 `);
 
   process.exit(0);
 }
 
-const [pattern, old, replacement = ''] = args._.slice(0, 3);
+const [pattern, search, replace = ''] = args._.slice(0, 3);
 
-const files = getFiles(pattern);
+if (args['--interactive'] || !pattern || !search || !replace) {
+  interactive({
+    initialPattern: pattern,
+    initialSearch: search,
+    initialReplace: replace,
+  })
+    .then((result) => {
+      execute({ ...result, dry: !!args['--dry'] });
+    })
+    .catch((error) => {
+      if (error === 'abort') {
+        process.exit(1);
+      }
 
-files.forEach((filePath) => {
-  const newPath = filePath.replace(old, replacement);
-  fs.moveSync(filePath, newPath);
-});
+      throw error;
+    });
+} else {
+  execute({ pattern, search, replace, dry: !!args['--dry'] });
+}

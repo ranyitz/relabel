@@ -54,7 +54,7 @@ if (args['--help']) {
       --version, -v       Version number
       --help, -h          Displays this message
       --dry, -d           Dry-run mode, does not modify files
-      --interactive, -i   Interactive Mode, automatically used when not all argument are provided
+      --interactive, -i   Interactive Mode, automatically used when not all arguments are provided
 `);
 
   process.exit(0);

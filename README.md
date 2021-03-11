@@ -3,7 +3,7 @@
 <h1 align="center">🏷 Relabel</h1>
 <p align="center">Interactive bulk renaming tool</p>
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/11733036/110845674-95dd5780-82b3-11eb-87ca-2f9e6f7f4d29.gif" alt="relabel-example"/>
+  <img src="https://user-images.githubusercontent.com/11733036/110851019-2bc7b100-82b9-11eb-8e7f-43e23b52f568.gif" alt="relabel-example"/>
 </p>
 <p align="center">
   <a href="https://github.com/ranyitz/relabel/actions/workflows/node.js.yml">

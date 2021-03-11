@@ -3,8 +3,10 @@ import { render, useApp } from 'ink';
 import { getFiles } from './getFiles';
 import { Monitor } from './components/Monitor';
 import { Form } from './components/From';
+import { memoize } from './utils';
 
 const DEFAULT_PATTERN = '**';
+const memoizedGetFiles = memoize(getFiles);
 
 export const interactive = async ({
   initialPattern,
@@ -29,7 +31,7 @@ export const interactive = async ({
       const updateFiles = (p: string | undefined) => {
         if (!p) p = DEFAULT_PATTERN;
 
-        getFiles(p)
+        memoizedGetFiles(p)
           .then((f) => {
             setPatternError(null);
             setFiles(f);

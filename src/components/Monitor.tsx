@@ -1,6 +1,9 @@
 import React from 'react';
-import chalk from 'chalk';
 import { Text } from 'ink';
+import { getReplaceColor, getSearchColor } from './colors';
+
+const searchColor = getSearchColor();
+const replaceColor = getReplaceColor();
 
 export const Monitor = ({
   files,
@@ -61,8 +64,8 @@ export const Monitor = ({
           return (
             <Text key={filePath}>
               <Text>{filePath.substr(0, matchStartIndex)}</Text>
-              <Text strikethrough>{getSearchColor()(match)}</Text>
-              <Text color="green">{getReplaceColor()(replace)}</Text>
+              <Text strikethrough>{searchColor`${match}`}</Text>
+              <Text color="green">{replaceColor`${replace}`}</Text>
               <Text>{filePath.substr(matchStartIndex + match.length)}</Text>
             </Text>
           );
@@ -71,49 +74,3 @@ export const Monitor = ({
     </>
   );
 };
-
-const getReplaceColor = () => {
-  const level = chalk.level;
-
-  if (level === 3) {
-    return chalk.bgHex('#5f8700').white;
-  }
-
-  if (level === 2) {
-    return chalk.ansi256(aForeground2).bgAnsi256(aBackground2);
-  }
-
-  return chalk.magenta.bgYellowBright;
-};
-
-const getSearchColor = () => {
-  const level = chalk.level;
-
-  if (level === 3) {
-    return chalk.bgHex('#af0000').white;
-  }
-
-  if (level === 2) {
-    return chalk.ansi256(bForeground2).bgAnsi256(bBackground2);
-  }
-
-  return chalk.cyan.bgWhiteBright; // also known as teal
-};
-
-// https://jonasjacek.github.io/colors/
-
-// 64	Chartreuse4	#5f8700	rgb(95,135,0)	hsl(7,100%,26%)
-export const aForeground2 = 15;
-export const aBackground2 = 64;
-
-//130	DarkOrange3	#af5f00	rgb(175,95,0)	hsl(2,100%,34%)
-export const bForeground2 = 15;
-export const bBackground2 = 130;
-
-export type RGB = [number, number, number];
-
-export const aForeground3: RGB = [0x80, 0, 0x80];
-export const aBackground3: RGB = [0xff, 0xd7, 0xff];
-
-export const bForeground3: RGB = [0, 0x5f, 0x5f];
-export const bBackground3: RGB = [0xd7, 0xff, 0xff];

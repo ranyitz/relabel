@@ -21,6 +21,7 @@
     "clean-build": "rm -rf build tsconfig.tsbuildinfo",
     "createVersion": "np"
   },
+  "bundledDependencies": ["update-notifier"],
   "dependencies": {
     "update-notifier": "^5.1.0"
   },

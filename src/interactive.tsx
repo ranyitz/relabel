@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { render, useApp } from 'ink';
 import { getFiles } from './getFiles';
 import { Monitor, Match } from './components/Monitor';
-import { Form } from './components/From';
+import { Form } from './components/Form';
 import { memoize } from './utils';
 
 const DEFAULT_PATTERN = '**';

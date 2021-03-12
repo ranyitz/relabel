@@ -1,6 +1,6 @@
 ## Changelog
 
-### 0.2.0
+### 0.2.2
 Package with ncc for faster install time
 
 ### 0.1.1

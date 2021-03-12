@@ -8,7 +8,7 @@ export type Match = {
   matchStartIndex: number;
 };
 
-const confirmText = '- Press "Enter" to confirm11';
+const confirmText = '- Press "Enter" to confirm';
 const searchColor = getSearchColor();
 const replaceColor = getReplaceColor();
 

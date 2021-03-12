@@ -1,5 +1,8 @@
 ## Changelog
 
+### 0.2.0
+Package with ncc for faster install time
+
 ### 0.1.1
 * Fix flickering by reducing un-wanted re-renders on initial load
 * Added confirm text, so it will be clear that Pressing Enter submits the action

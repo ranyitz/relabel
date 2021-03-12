@@ -1,4 +1,5 @@
 fixtures/error
 build
+dist
 example/**/double.js
 example/**/single.js

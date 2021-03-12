@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useInput } from 'ink';
 import { Box, Text } from 'ink';
 import { replaceElement } from '../utils';
@@ -153,7 +153,17 @@ export const Input = ({
   validationError?: string | null;
   label?: string;
 }) => {
-  useEffect(() => onChange(value), [value]);
+  const notInitialRender = useRef(false);
+
+  // We don't want to call onChange on first render
+  // This prevents re-renders on initial load
+  useEffect(() => {
+    if (notInitialRender.current) {
+      onChange(value);
+    } else {
+      notInitialRender.current = true;
+    }
+  }, [value]);
 
   const textWithCursor = (text?: string) => {
     if (!text) {

@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { render, useApp } from 'ink';
 import { getFiles } from './getFiles';
-import { Monitor } from './components/Monitor';
+import { Monitor, Match } from './components/Monitor';
 import { Form } from './components/From';
 import { memoize } from './utils';
 
 const DEFAULT_PATTERN = '**';
 const memoizedGetFiles = memoize(getFiles);
+
+type State = {
+  files: Array<string>;
+  searchRegExp: RegExp | null;
+  replace: string | null;
+  searchError: string | null;
+  patternError: string | null;
+};
 
 export const interactive = async ({
   initialPattern,
@@ -22,22 +30,30 @@ export const interactive = async ({
     const App = () => {
       const { exit } = useApp();
 
-      const [files, setFiles] = useState<Array<string>>([]);
-      const [searchRegexp, setSearchRegexp] = useState<RegExp | null>(null);
-      const [replace, setReplace] = useState<string | null>(null);
-      const [searchError, setSearchError] = useState<string | null>(null);
-      const [patternError, setPatternError] = useState<string | null>(null);
+      const [state, setState] = useState<State>({
+        files: [],
+        searchRegExp: null,
+        replace: null,
+        searchError: null,
+        patternError: null,
+      });
+
+      const { files, searchRegExp, replace, searchError, patternError } = state;
+      const matches = getMatches(files, searchRegExp);
+
+      useEffect(() => {
+        updateFiles(initialPattern);
+      }, []);
 
       const updateFiles = (p: string | undefined) => {
         if (!p) p = DEFAULT_PATTERN;
 
         memoizedGetFiles(p)
           .then((f) => {
-            setPatternError(null);
-            setFiles(f);
+            setState({ ...state, patternError: null, files: f });
           })
           .catch((error) => {
-            setPatternError(error.message);
+            setState({ ...state, patternError: error.message, files: [] });
           });
       };
 
@@ -71,16 +87,26 @@ export const interactive = async ({
                 validationError: searchError,
                 onChange: (newInput) => {
                   if (!newInput) {
-                    setSearchRegexp(null);
-                    setSearchError(null);
+                    setState({
+                      ...state,
+                      searchRegExp: null,
+                      searchError: null,
+                    });
                     return;
                   }
 
                   try {
-                    setSearchRegexp(new RegExp(newInput));
-                    setSearchError(null);
+                    setState({
+                      ...state,
+                      searchRegExp: new RegExp(newInput),
+                      searchError: null,
+                    });
                   } catch (error) {
-                    setSearchError(error.message);
+                    setState({
+                      ...state,
+                      searchRegExp: null,
+                      searchError: error.message,
+                    });
                   }
                 },
               },
@@ -88,14 +114,18 @@ export const interactive = async ({
                 label: 'Replace',
                 initialValue: initialReplace,
                 onChange: (newInput) => {
-                  setReplace(newInput ?? null);
+                  setState({
+                    ...state,
+                    replace: newInput ?? null,
+                  });
                 },
               },
             ]}
           ></Form>
           <Monitor
             files={files}
-            searchRegexp={searchRegexp}
+            searchRegExp={searchRegExp}
+            matches={matches}
             replace={replace}
           />
         </>
@@ -106,4 +136,22 @@ export const interactive = async ({
 
     clear = inkRenderApi.clear;
   });
+};
+
+const getMatches = (files: Array<string>, searchRegexp?: RegExp | null) => {
+  if (!searchRegexp) return [];
+
+  const matches: Array<Match> = [];
+
+  for (const filePath of files) {
+    const result = searchRegexp.exec(filePath);
+
+    if (result) {
+      const match = result[0];
+      const matchStartIndex = result.index;
+      matches.push({ filePath, match, matchStartIndex });
+    }
+  }
+
+  return matches;
 };

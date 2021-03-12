@@ -19,7 +19,13 @@ export const execute = async ({
     const result = searchRegexp.exec(filePath);
 
     if (result) {
-      const newPath = filePath.replace(searchRegexp, replace);
+      let newPath;
+
+      if (result[0] === '') {
+        newPath = filePath + replace;
+      } else {
+        newPath = filePath.replace(searchRegexp, replace);
+      }
 
       if (newPath === filePath) return;
 

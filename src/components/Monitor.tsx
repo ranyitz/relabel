@@ -1,21 +1,39 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Text } from 'ink';
 import { getReplaceColor, getSearchColor } from './colors';
 
+export type Match = {
+  filePath: string;
+  match: string;
+  matchStartIndex: number;
+};
+
+const confirmText = '- Press "Enter" to confirm';
 const searchColor = getSearchColor();
 const replaceColor = getReplaceColor();
 
 export const Monitor = ({
   files,
-  searchRegexp,
   replace,
+  searchRegExp,
+  matches,
 }: {
   files: Array<string>;
-  searchRegexp: RegExp | null;
+  matches: Array<Match>;
+  searchRegExp: RegExp | null;
   replace: string | null;
 }) => {
-  const maxMonitorHeight = process.stdout.rows - 5;
+  const maxMonitorHeight = process.stdout.rows - 7;
   const totalFiles = files.length;
+
+  const notInitialRender = useRef(false);
+
+  // Prevent flickering on the no matched files
+  // Warning (since we get the files after a few miliseconds)
+  if (!notInitialRender.current) {
+    notInitialRender.current = true;
+    return <></>;
+  }
 
   if (totalFiles === 0) {
     return (
@@ -27,37 +45,31 @@ export const Monitor = ({
     );
   }
 
-  if (!searchRegexp) {
+  if (!searchRegExp || matches.length === 0) {
     return (
       <>
         <Text dimColor color="yellow">
           {0} / {totalFiles}
+          {replace ? <Text> {confirmText}</Text> : null}
         </Text>
         {files
           .map((filePath) => {
-            return <Text key={filePath}>{filePath}</Text>;
+            return (
+              <Text key={filePath}>
+                {filePath}
+                {replace ? <Text>{replaceColor`${replace}`}</Text> : null}
+              </Text>
+            );
           })
           .slice(0, maxMonitorHeight)}
       </>
     );
   }
 
-  const matches = [];
-
-  for (const filePath of files) {
-    const result = searchRegexp.exec(filePath);
-
-    if (result) {
-      const match = result[0];
-      const matchStartIndex = result.index;
-      matches.push({ filePath, match, matchStartIndex });
-    }
-  }
-
   return (
     <>
       <Text dimColor color="yellow">
-        {matches.length} / {totalFiles}
+        {matches.length} / {totalFiles} <Text>{confirmText}</Text>
       </Text>
       {matches
         .map(({ filePath, match, matchStartIndex }) => {
@@ -65,7 +77,7 @@ export const Monitor = ({
             <Text key={filePath}>
               <Text>{filePath.substr(0, matchStartIndex)}</Text>
               <Text strikethrough>{searchColor`${match}`}</Text>
-              <Text color="green">{replaceColor`${replace}`}</Text>
+              {replace ? <Text>{replaceColor`${replace}`}</Text> : null}
               <Text>{filePath.substr(matchStartIndex + match.length)}</Text>
             </Text>
           );

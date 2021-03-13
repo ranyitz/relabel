@@ -47,7 +47,7 @@ npx relabel
 ## Development
 
 * See the [Contributing Guide](CONTRIBUTING.md)
-* Using [Ink](https://github.com/vadimdemedes/ink) for rendering the interactive UI.
+* Using [Ink](https://github.com/vadimdemedes/ink) for rendering the interactive UI
 
 ## Related Projects
 * [Globitor](https://github.com/ranyitz/globitor) - Interactive glob pattern tester

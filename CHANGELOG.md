@@ -1,5 +1,8 @@
 ## Changelog
 
+### 0.2.3
+Remove version notifier and encaurage to install using `npx`
+
 ### 0.2.2
 Package with ncc for faster install time
 

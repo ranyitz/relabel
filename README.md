@@ -1,5 +1,3 @@
-# Relabel
-
 <h1 align="center">🏷 Relabel</h1>
 <p align="center">Interactive bulk renaming tool</p>
 <p align="center">

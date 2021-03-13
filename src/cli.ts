@@ -1,11 +1,6 @@
 import arg from 'arg';
-import updateNotifier from 'update-notifier';
 import { interactive } from './interactive';
 import { execute } from './execute';
-
-const pkg = require('../package.json');
-
-updateNotifier({ pkg }).notify();
 
 process.on('unhandledRejection', (error) => {
   throw error;

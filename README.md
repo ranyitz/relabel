@@ -18,14 +18,13 @@
 </p>
 
 ## Why
-I missed the same search & replace the experience that we have in the IDE for code. The current solution doesn't provide the proper feedback that you can achieve from the interactive mode
+I missed the same search & replace the experience that we have in the IDE for code. Current solutions doesn't provide the proper feedback that you can achieve from the interactive mode
 
-## Installation
-```
-npm install --global relabel
+## Usage
+```bash
+npx relabel
 ```
 
-> You can also use `npx relabel` but it's advised to install it globally for faster bootstrapping time
 ## CLI
 ```
    Usage

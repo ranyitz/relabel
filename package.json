@@ -1,6 +1,7 @@
 {
   "name": "relabel",
   "version": "0.2.3",
+  "repository": "ranyitz/relabel",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "bin": {

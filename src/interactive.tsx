@@ -101,7 +101,7 @@ export const interactive = async ({
                       searchRegExp: new RegExp(newInput),
                       searchError: null,
                     });
-                  } catch (error) {
+                  } catch (error: any) {
                     setState({
                       ...state,
                       searchRegExp: null,

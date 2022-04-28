@@ -4,9 +4,7 @@
   "repository": "ranyitz/relabel",
   "main": "build/index.js",
   "types": "build/index.d.ts",
-  "bin": {
-    "relabel": "bin/relabel"
-  },
+  "bin": "bin/relabel",
   "files": [
     "dist",
     "bin"
@@ -57,5 +55,6 @@
   },
   "lint-staged": {
     "*.ts": "eslint --cache --fix"
-  }
+  },
+  "packageManager": "yarn@3.2.0"
 }
